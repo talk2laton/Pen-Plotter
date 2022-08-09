@@ -36,12 +36,16 @@ XMin = 4; XMax = 27;
 YMin = -28; YMax = 20;
 XFac = (XMax - XMin)/(YMax-YMin);
 
-Plotter.plot = @(filename, orientation, clr, linewitdth) ...
-                 Plot(filename, orientation, clr, linewitdth);
+Plotter.plot = @(filename, step, orientation, clr, linewitdth) ...
+                 Plot(filename, step, orientation, clr, linewitdth);
 
-    function Plot(filename, orientation, clr, linewidth)
+    function Plot(filename, step, orientation, clr, linewidth)
         zmove = 0.5; Pen.pen.FaceColor = clr;
-        [Paths, xmin, xmax, ymin, ymax] = ExtractImagePaths(filename);
+        if(ischar(filename))
+            [Paths, xmin, xmax, ymin, ymax] = ExtractImagePaths(filename, step);
+        else
+            [Paths, xmin, xmax, ymin, ymax] = ExtractPaths(filename, step);
+        end
         xfac = (xmax-xmin)/(ymax - ymin);
         if(XFac > xfac)
             XMean = 0.5*(XMin + XMax);
@@ -102,7 +106,7 @@ Plotter.plot = @(filename, orientation, clr, linewitdth) ...
 
     function move(x, y, line3)
         del = sqrt((x_current-x)^2 + (y_current-y)^2);
-        n   = ceil(del/0.2);
+        n   = ceil(del/0.5);
         if(n > 0)
             dx = (x - x_current)/n; dy = (y - y_current)/n;
             for i = 1:n
@@ -122,8 +126,8 @@ Plotter.plot = @(filename, orientation, clr, linewitdth) ...
     end
 
     function penup(zmove)
-        dz = zmove/20;
-        for n = 1:20
+        dz = zmove/10;
+        for n = 1:10
             Pen.penup(dz); 
             drawnow;
         end

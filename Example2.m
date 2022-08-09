@@ -1,0 +1,13 @@
+n = 5.2;
+t = linspace(0, 10*pi, 1001);  
+R = 1; r = R/n;
+x1 = (2*R-r)*cos(t) + r*cos((n-1)*t); y1 = (2*R-r)*sin(t) - r*sin((n-1)*t);
+R = R*(2 - 2/n); r = R/n;
+x2 = (R-2*r)*cos(t) + 2*r*cos((n-1)*t); y2 = (R-2*r)*sin(t) - 2*r*sin((n-1)*t);
+Paths = {[x1; y1]', [x2; y2]'};
+Step = 1;
+Orientation = 'Landscape';
+Colour = 'k';
+Thickness = 2;
+Plotter = MakePlotter; 
+Plotter.plot(Paths, Step, Orientation, Colour, Thickness);
